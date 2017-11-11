@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "70073664599",
+    "firebase_url": "https://androidubertwin.firebaseio.com",
+    "project_id": "androidubertwin",
+    "storage_bucket": "androidubertwin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70073664599:android:7e245072315164e0",
+        "android_client_info": {
+          "package_name": "com.oscar.androidubertwin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70073664599-992ge4sgf27kvq2gdm714caqadlqtmka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oscar.androidubertwin",
+            "certificate_hash": "d399daf5a83091f4dd6a5d5ac5e3bb84831d9c4c"
+          }
+        },
+        {
+          "client_id": "70073664599-bqvb86dnf197al5p0f8l6kd4c748vljr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlFV930uzGF_CwA5cWt5kJbb-BuuWKfJs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70073664599-bqvb86dnf197al5p0f8l6kd4c748vljr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

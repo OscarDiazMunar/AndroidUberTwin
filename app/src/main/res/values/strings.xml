@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">AndroidUberTwin</string>
+    <string name="login.register">REGISTER</string>
+    <string name="login.sing_in">SING IN</string>
+    <string name="title_uber">U B E R   T W I N</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="title_register">REGISTER</string>
+    <string name="message_register">Please use email to register</string>
+    <string name="cancel">CANCEL</string>
+    <string name="email_empty">please enter email</string>
+    <string name="email_valid">please enter valid email</string>
+    <string name="pass_empty">please enter password</string>
+    <string name="name_empty">please enter name</string>
+    <string name="phone_empty">please enter phone</string>
+    <string name="title_login">SING IN</string>
+</resources>
