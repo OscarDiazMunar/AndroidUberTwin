@@ -5,4 +5,6 @@ package com.oscar.androidubertwin.presentation.view;
  */
 
 public interface IWelcomeActivityView {
+    void showProgress();
+    void dismissProgress();
 }
