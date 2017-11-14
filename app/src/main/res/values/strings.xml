@@ -16,4 +16,9 @@
     <string name="name_empty">please enter name</string>
     <string name="phone_empty">please enter phone</string>
     <string name="title_login">SING IN</string>
+    <string name="title_activity_welcome_maps">Map</string>
+    <string name="online">You are online</string>
+    <string name="offline">You are offline</string>
+    <string name="device_not_supported">This device is not supported</string>
+    <string name="find_user">FIND USER</string>
 </resources>

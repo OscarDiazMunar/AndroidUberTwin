@@ -29,8 +29,8 @@ import com.oscar.androidubertwin.utils.Validator;
 
 public class MainActivityPresenter implements IMainActivityPresenter {
 
-    private MainActivity mainActivity;
-    private Context context;
+    private final MainActivity mainActivity;
+    private final Context context;
 
     private EditText txtEmailRegister;
     private EditText txtPasswordRegister;
@@ -56,11 +56,6 @@ public class MainActivityPresenter implements IMainActivityPresenter {
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseUsers = firebaseDatabase.getReference("Users");
-    }
-
-    @Override
-    public void checkValidationDataEntry(String email, String password, String name, String phone) {
-
     }
 
     @Override
@@ -134,7 +129,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             }
         });
 
-        dialogLogin.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        dialogLogin.setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -236,7 +231,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailRegister.getText().toString().isEmpty()) {
                     txtEmailRegister.setError(mainActivity.getString(R.string.email_empty));
-                }else if (!Validator.isValidEmail(txtEmailRegister.getText().toString())){
+                }else if (Validator.isValidEmail(txtEmailRegister.getText().toString())){
                     txtEmailRegister.setError(mainActivity.getString(R.string.email_valid));
                 }
                 else {
@@ -380,7 +375,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailLogin.getText().toString().isEmpty()) {
                     txtEmailLogin.setError(mainActivity.getString(R.string.email_empty));
-                }else if (!Validator.isValidEmail(txtEmailLogin.getText().toString())){
+                }else if (Validator.isValidEmail(txtEmailLogin.getText().toString())){
                     txtEmailLogin.setError(mainActivity.getString(R.string.email_valid));
                 }
                 else {

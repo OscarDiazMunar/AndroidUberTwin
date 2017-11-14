@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -51,18 +50,10 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
                 presenter.showLoginDialog();
                 break;
             case R.id.btnRegister:
-                Log.e("barbie", "loca");
-                //showRegisterDialog();
                 presenter.showRegisterDialog();
                 break;
         }
     }
-
-    @Override
-    public void setMessageError(int type, String mesage) {
-
-    }
-
 
     @Override
     public void setMessageSnackBar(String message) {
@@ -71,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivityView
 
     @Override
     public void navigateToWelcome() {
-        startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+        startActivity(new Intent(MainActivity.this, MapsActivity.class));
     }
 
     @Override

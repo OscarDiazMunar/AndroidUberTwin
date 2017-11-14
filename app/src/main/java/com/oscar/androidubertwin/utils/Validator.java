@@ -7,11 +7,9 @@ import android.util.Patterns;
  */
 
 public final class Validator {
-    public Validator() {
-    }
 
     public static boolean isValidEmail(String email)
     {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return !Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
