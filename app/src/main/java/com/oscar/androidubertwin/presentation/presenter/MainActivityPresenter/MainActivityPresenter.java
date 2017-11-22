@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -20,17 +19,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.oscar.androidubertwin.R;
 import com.oscar.androidubertwin.domain.model.User;
+import com.oscar.androidubertwin.presentation.presenter.Presenter;
 import com.oscar.androidubertwin.presentation.ui.MainActivity;
+import com.oscar.androidubertwin.presentation.view.IMainActivityView;
 import com.oscar.androidubertwin.utils.Validator;
 
 /**
  * Created by oscar on 11/10/2017.
  */
+public class MainActivityPresenter extends Presenter<IMainActivityView> implements IMainActivityPresenter{
 
-public class MainActivityPresenter implements IMainActivityPresenter {
-
-    private final MainActivity mainActivity;
-    private final Context context;
+    private static MainActivity mainActivity;
+    private static Context context;
 
     private EditText txtEmailRegister;
     private EditText txtPasswordRegister;
@@ -46,6 +46,13 @@ public class MainActivityPresenter implements IMainActivityPresenter {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseUsers;
 
+
+    /**
+     * Instantiates a new Main activity presenter.
+     *
+     * @param mainActivity the main activity
+     * @param context      the context
+     */
     public MainActivityPresenter(MainActivity mainActivity, Context context) {
         this.mainActivity = mainActivity;
         this.context = context;
@@ -79,8 +86,8 @@ public class MainActivityPresenter implements IMainActivityPresenter {
         dialogRegister.setPositiveButton(R.string.login_register, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mainActivity.showProgress();
-                mainActivity.enableButtons(false);
+                getView().showProgress();
+                getView().enableButtons(false);
                 createNewUser();
             }
         });
@@ -94,7 +101,6 @@ public class MainActivityPresenter implements IMainActivityPresenter {
 
         final AlertDialog dialog = dialogRegister.create();
 
-        //dialogRegister.show();
         dialog.show();
         buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         buttonPositive.setEnabled(false);
@@ -123,8 +129,9 @@ public class MainActivityPresenter implements IMainActivityPresenter {
         dialogLogin.setPositiveButton(R.string.login_sing_in, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mainActivity.showProgress();
-                mainActivity.enableButtons(false);
+                getView().showProgress();
+                getView().enableButtons(false);
+                //mainActivity.enableButtons(false);
                 loginUser();
             }
         });
@@ -132,14 +139,12 @@ public class MainActivityPresenter implements IMainActivityPresenter {
         dialogLogin.setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                 dialogInterface.dismiss();
             }
         });
 
         final AlertDialog dialog = dialogLogin.create();
 
-        //dialogLogin.show();
         dialog.show();
         buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         buttonPositive.setEnabled(false);
@@ -152,16 +157,16 @@ public class MainActivityPresenter implements IMainActivityPresenter {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        mainActivity.dismissProgress();
-                        mainActivity.navigateToWelcome();
+                        getView().dismissProgress();
+                        getView().navigateToWelcome();
                         mainActivity.finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mainActivity.dismissProgress();
-                mainActivity.enableButtons(true);
-                mainActivity.setMessageSnackBar("login failure " + e.getMessage());
+                getView().dismissProgress();
+                getView().enableButtons(true);
+                getView().setMessageSnackBar(context.getString(R.string.login_error) + e.getMessage());
             }
         });
     }
@@ -172,25 +177,25 @@ public class MainActivityPresenter implements IMainActivityPresenter {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         User user = new User(txtEmailRegister.getText().toString(),
-                                                txtPasswordRegister.getText().toString(),
-                                                txtNameRegister.getText().toString(),
-                                                txtPhoneRegister.getText().toString());
+                                txtPasswordRegister.getText().toString(),
+                                txtNameRegister.getText().toString(),
+                                txtPhoneRegister.getText().toString());
                         databaseUsers.child(auth.getCurrentUser().getUid())
                                 .setValue(user)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        mainActivity.enableButtons(true);
-                                        mainActivity.dismissProgress();
-                                        mainActivity.setMessageSnackBar("succes register");
+                                        getView().enableButtons(true);
+                                        getView().dismissProgress();
+                                        getView().setMessageSnackBar(context.getString(R.string.succes_register));
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        mainActivity.enableButtons(true);
-                                        mainActivity.dismissProgress();
-                                        mainActivity.setMessageSnackBar("base datos "+e.getMessage());
-                                    }
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                getView().enableButtons(true);
+                                getView().dismissProgress();
+                                getView().setMessageSnackBar(context.getString(R.string.database_error) + e.getMessage());
+                            }
                         });
 
 
@@ -198,9 +203,9 @@ public class MainActivityPresenter implements IMainActivityPresenter {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                mainActivity.enableButtons(true);
-                mainActivity.dismissProgress();
-                mainActivity.setMessageSnackBar("no create user "+e.getMessage());
+                getView().enableButtons(true);
+                getView().dismissProgress();
+                getView().setMessageSnackBar(context.getString(R.string.createuser_error) + e.getMessage());
             }
         });
     }
@@ -216,7 +221,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtEmailRegister.getText().toString().isEmpty()) {
-                    txtEmailRegister.setError(mainActivity.getString(R.string.email_empty));
+                    txtEmailRegister.setError(context.getString(R.string.email_empty));
                 }
             }
         });
@@ -231,10 +236,9 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailRegister.getText().toString().isEmpty()) {
                     txtEmailRegister.setError(mainActivity.getString(R.string.email_empty));
-                }else if (Validator.isValidEmail(txtEmailRegister.getText().toString())){
-                    txtEmailRegister.setError(mainActivity.getString(R.string.email_valid));
-                }
-                else {
+                } else if (Validator.isValidEmail(txtEmailRegister.getText().toString())) {
+                    txtEmailRegister.setError(context.getString(R.string.email_valid));
+                } else {
                     a[0] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
                         buttonPositive.setEnabled(true);
@@ -252,7 +256,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtPasswordRegister.getText().toString().isEmpty()) {
-                    txtPasswordRegister.setError(mainActivity.getString(R.string.pass_empty));
+                    txtPasswordRegister.setError(context.getString(R.string.pass_empty));
                 }
             }
         });
@@ -266,7 +270,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPasswordRegister.getText().toString().isEmpty()) {
-                    txtPasswordRegister.setError(mainActivity.getString(R.string.pass_empty));
+                    txtPasswordRegister.setError(context.getString(R.string.pass_empty));
                 } else {
                     a[1] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -285,7 +289,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtNameRegister.getText().toString().isEmpty()) {
-                    txtNameRegister.setError(mainActivity.getString(R.string.name_empty));
+                    txtNameRegister.setError(context.getString(R.string.name_empty));
                 }
             }
         });
@@ -299,7 +303,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtNameRegister.getText().toString().isEmpty()) {
-                    txtNameRegister.setError(mainActivity.getString(R.string.name_empty));
+                    txtNameRegister.setError(context.getString(R.string.name_empty));
                 } else {
                     a[2] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -318,7 +322,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtPhoneRegister.getText().toString().isEmpty()) {
-                    txtPhoneRegister.setError(mainActivity.getString(R.string.phone_empty));
+                    txtPhoneRegister.setError(context.getString(R.string.phone_empty));
                 }
             }
         });
@@ -332,7 +336,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPhoneRegister.getText().toString().isEmpty()) {
-                    txtPhoneRegister.setError(mainActivity.getString(R.string.phone_empty));
+                    txtPhoneRegister.setError(context.getString(R.string.phone_empty));
                 } else {
                     a[3] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -350,6 +354,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
         txtInputPassword.setCounterEnabled(true);
         txtInputPassword.setCounterMaxLength(8);
     }
+
     private void checkValidationFieldsLogin(final Button buttonPositive) {
 
         final boolean[] a = new boolean[2];
@@ -360,7 +365,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtEmailLogin.getText().toString().isEmpty()) {
-                    txtEmailLogin.setError(mainActivity.getString(R.string.email_empty));
+                    txtEmailLogin.setError(context.getString(R.string.email_empty));
                 }
             }
         });
@@ -374,11 +379,10 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailLogin.getText().toString().isEmpty()) {
-                    txtEmailLogin.setError(mainActivity.getString(R.string.email_empty));
-                }else if (Validator.isValidEmail(txtEmailLogin.getText().toString())){
-                    txtEmailLogin.setError(mainActivity.getString(R.string.email_valid));
-                }
-                else {
+                    txtEmailLogin.setError(context.getString(R.string.email_empty));
+                } else if (Validator.isValidEmail(txtEmailLogin.getText().toString())) {
+                    txtEmailLogin.setError(context.getString(R.string.email_valid));
+                } else {
                     a[0] = true;
                     if (a[0] && a[1]) {
                         buttonPositive.setEnabled(true);
@@ -396,7 +400,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (txtPasswordLogin.getText().toString().isEmpty()) {
-                    txtPasswordLogin.setError(mainActivity.getString(R.string.pass_empty));
+                    txtPasswordLogin.setError(context.getString(R.string.pass_empty));
                 }
             }
         });
@@ -410,7 +414,7 @@ public class MainActivityPresenter implements IMainActivityPresenter {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPasswordLogin.getText().toString().isEmpty()) {
-                    txtPasswordLogin.setError(mainActivity.getString(R.string.pass_empty));
+                    txtPasswordLogin.setError(context.getString(R.string.pass_empty));
                 } else {
                     a[1] = true;
                     if (a[0] && a[1]) {

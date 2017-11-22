@@ -21,4 +21,12 @@
     <string name="offline">You are offline</string>
     <string name="device_not_supported">This device is not supported</string>
     <string name="find_user">FIND USER</string>
+    <string name="login_error">Login failure</string>
+    <string name="succes_register">Succes register</string>
+    <string name="database_error">Database error</string>
+    <string name="createuser_error">Error create user</string>
+    <string name="your_location">Your location</string>
+    <string name="title_gps_off">GPS OFF</string>
+    <string name="message_gps_off">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="pickup_location">Pickup Location</string>
 </resources>
