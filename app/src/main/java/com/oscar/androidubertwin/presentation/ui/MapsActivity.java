@@ -33,9 +33,14 @@ import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -85,13 +90,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * The Edt place.
      */
-    @BindView(R.id.edtPlace)
-    EditText edtPlace;
+    /*@BindView(R.id.edtPlace)
+    EditText edtPlace;*/
     /**
      * The Btn go.
      */
-    @BindView(R.id.btnGo)
-    Button btnGo;
+    /*@BindView(R.id.btnGo)
+    Button btnGo;*/
+    private PlaceAutocompleteFragment places;
     /**
      * The Btn find user.
      */
@@ -166,6 +172,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Snackbar.make(mapFragment.getView(), R.string.offline, Snackbar.LENGTH_SHORT).show();
                 }
+
+            }
+        });
+
+        places = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        places.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                if (locationSwitch.isChecked()){
+                    currentPosition = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                    presenter.getDirection(place.getAddress().toString().replace(" ", "+"), currentPosition);
+                }else {
+                    Toast.makeText(MapsActivity.this, R.string.status_online, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.e("errorPlaces", status.getStatus().toString());
+                Toast.makeText(MapsActivity.this, "" + status.toString(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -399,13 +426,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      *
      * @param view the view
      */
-    @OnClick({R.id.btnGo, R.id.btnFindUser})
+    //@OnClick({R.id.btnGo, R.id.btnFindUser})
+    @OnClick({R.id.btnFindUser})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btnGo:
+            /*case R.id.btnGo:
                 currentPosition = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
                 presenter.getDirection(edtPlace.getText().toString().replace(" ", "+"), currentPosition);
-                break;
+                break;*/
             case R.id.btnFindUser:
                 break;
         }

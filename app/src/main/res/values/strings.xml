@@ -1,5 +1,7 @@
 <resources>
+
     <string name="app_name">AndroidUberTwin</string>
+    <!--LOGIN-->
     <string name="login.register">REGISTER</string>
     <string name="login.sing_in">SING IN</string>
     <string name="title_uber">U B E R   T W I N</string>
@@ -16,6 +18,7 @@
     <string name="name_empty">please enter name</string>
     <string name="phone_empty">please enter phone</string>
     <string name="title_login">SING IN</string>
+    <!--MAPS-->
     <string name="title_activity_welcome_maps">Map</string>
     <string name="online">You are online</string>
     <string name="offline">You are offline</string>
@@ -29,4 +32,5 @@
     <string name="title_gps_off">GPS OFF</string>
     <string name="message_gps_off">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="pickup_location">Pickup Location</string>
+    <string name="status_online">Please turn ONLINE</string>
 </resources>
