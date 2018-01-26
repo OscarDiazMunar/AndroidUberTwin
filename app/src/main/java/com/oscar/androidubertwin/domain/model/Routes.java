@@ -3,6 +3,7 @@ package com.oscar.androidubertwin.domain.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by oscar on 11/17/2017.
@@ -10,6 +11,9 @@ import java.io.Serializable;
 public class Routes implements Serializable{
     @SerializedName("overview_polyline")
     private OverviewPolyline overview_polyline;
+
+    @SerializedName("legs")
+    private List<Legs> legs;
 
     /**
      * Gets overview polyline.
@@ -29,10 +33,19 @@ public class Routes implements Serializable{
         this.overview_polyline = overview_polyline;
     }
 
+    public List<Legs> getLegs() {
+        return legs;
+    }
+
+    public void setLegs(List<Legs> legs) {
+        this.legs = legs;
+    }
+
     @Override
     public String toString() {
         return "Routes{" +
                 "overview_polyline=" + overview_polyline +
+                ", legs=" + legs +
                 '}';
     }
 }

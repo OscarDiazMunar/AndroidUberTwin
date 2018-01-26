@@ -60,11 +60,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.oscar.androidubertwin.R;
 import com.oscar.androidubertwin.UberTwinApp;
+import com.oscar.androidubertwin.domain.model.Token;
 import com.oscar.androidubertwin.presentation.presenter.MapsActivityPresenter.MapsActivityPresenter;
 import com.oscar.androidubertwin.presentation.view.IMapsActivityView;
-
+import com.oscar.androidubertwin.utils.Constants;
+import static com.oscar.androidubertwin.utils.GlobalVariables.lastLocation;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -72,6 +75,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 /**
  * The type Maps activity.
@@ -110,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LocationRequest locationRequest;
     private GoogleApiClient googleApiClient;
-    private Location lastLocation;
+    //private Location lastLocation;
 
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FATEST_INTERVAL = 3000;
@@ -197,9 +201,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        drivers = FirebaseDatabase.getInstance().getReference("Drivers");
+        drivers = FirebaseDatabase.getInstance().getReference(Constants.DBTables.driver_table);
         geoFire = new GeoFire(drivers);
         setUpLocation();
+        updateFirebaseToken();
+
+    }
+
+    private void updateFirebaseToken() {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference(Constants.DBTables.tokens_table);
+
+        Token token = new Token(FirebaseInstanceId.getInstance().getToken());
+        tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
 
     }
 
@@ -426,7 +440,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      *
      * @param view the view
      */
-    //@OnClick({R.id.btnGo, R.id.btnFindUser})
+//@OnClick({R.id.btnGo, R.id.btnFindUser})
     @OnClick({R.id.btnFindUser})
     public void onViewClicked(View view) {
         switch (view.getId()) {

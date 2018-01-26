@@ -22,6 +22,7 @@ import com.oscar.androidubertwin.domain.model.User;
 import com.oscar.androidubertwin.presentation.presenter.Presenter;
 import com.oscar.androidubertwin.presentation.ui.MainActivity;
 import com.oscar.androidubertwin.presentation.view.IMainActivityView;
+import com.oscar.androidubertwin.utils.Constants;
 import com.oscar.androidubertwin.utils.Validator;
 
 /**
@@ -62,7 +63,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
     public void onCreate() {
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseUsers = firebaseDatabase.getReference("Users");
+        databaseUsers = firebaseDatabase.getReference(Constants.DBTables.user_driver_table);
     }
 
     @Override
@@ -236,8 +237,10 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailRegister.getText().toString().isEmpty()) {
                     txtEmailRegister.setError(mainActivity.getString(R.string.email_empty));
+                    buttonPositive.setEnabled(false);
                 } else if (Validator.isValidEmail(txtEmailRegister.getText().toString())) {
                     txtEmailRegister.setError(context.getString(R.string.email_valid));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[0] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -271,6 +274,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPasswordRegister.getText().toString().isEmpty()) {
                     txtPasswordRegister.setError(context.getString(R.string.pass_empty));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[1] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -304,6 +308,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtNameRegister.getText().toString().isEmpty()) {
                     txtNameRegister.setError(context.getString(R.string.name_empty));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[2] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -337,6 +342,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPhoneRegister.getText().toString().isEmpty()) {
                     txtPhoneRegister.setError(context.getString(R.string.phone_empty));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[3] = true;
                     if (a[0] && a[1] && a[2] && a[3]) {
@@ -380,8 +386,10 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtEmailLogin.getText().toString().isEmpty()) {
                     txtEmailLogin.setError(context.getString(R.string.email_empty));
+                    buttonPositive.setEnabled(false);
                 } else if (Validator.isValidEmail(txtEmailLogin.getText().toString())) {
                     txtEmailLogin.setError(context.getString(R.string.email_valid));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[0] = true;
                     if (a[0] && a[1]) {
@@ -415,6 +423,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (txtPasswordLogin.getText().toString().isEmpty()) {
                     txtPasswordLogin.setError(context.getString(R.string.pass_empty));
+                    buttonPositive.setEnabled(false);
                 } else {
                     a[1] = true;
                     if (a[0] && a[1]) {

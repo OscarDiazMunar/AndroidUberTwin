@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">AndroidUberTwin</string>
+    <string name="app_name">Uber Driver Twin</string>
     <!--LOGIN-->
     <string name="login.register">REGISTER</string>
     <string name="login.sing_in">SING IN</string>
