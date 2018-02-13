@@ -33,4 +33,8 @@
     <string name="message_gps_off">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="pickup_location">Pickup Location</string>
     <string name="status_online">Please turn ONLINE</string>
+    <string name="call.accept">ACCEPT</string>
+    <string name="call.decline">DECLINE</string>
+    <string name="call.title.notification">Notice!</string>
+    <string name="call.body.notification">Driver has cancelled your request</string>
 </resources>

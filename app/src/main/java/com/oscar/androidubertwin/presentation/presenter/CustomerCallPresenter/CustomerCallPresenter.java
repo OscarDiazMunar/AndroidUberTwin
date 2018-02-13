@@ -4,7 +4,10 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.oscar.androidubertwin.domain.model.RequestGoogleApi;
+import com.oscar.androidubertwin.domain.model.ResponseFCM;
+import com.oscar.androidubertwin.domain.model.SenderFCM;
 import com.oscar.androidubertwin.domain.usecase.GetRequestApi;
+import com.oscar.androidubertwin.domain.usecase.SendNotification;
 import com.oscar.androidubertwin.domain.usecase.UseCaseObserver;
 import com.oscar.androidubertwin.presentation.presenter.Presenter;
 import com.oscar.androidubertwin.presentation.ui.CustomerCallActivity;
@@ -16,21 +19,31 @@ import com.oscar.androidubertwin.presentation.view.ICustomerCallView;
 public class CustomerCallPresenter extends Presenter<ICustomerCallView> implements ICustomerCallPresenter{
     private CustomerCallActivity customerCallActivity;
     private GetRequestApi getRequestApi;
+    private SendNotification sendNotification;
 
     /**
      * Instantiates a new Customer call presenter.
      *
      * @param customerCallActivity the customer call activity
      * @param getRequestApi        the get request api
+     * @param sendNotification     the send notification
      */
-    public CustomerCallPresenter(CustomerCallActivity customerCallActivity, GetRequestApi getRequestApi) {
+    public CustomerCallPresenter(CustomerCallActivity customerCallActivity,
+                                 GetRequestApi getRequestApi,
+                                 SendNotification sendNotification) {
         this.customerCallActivity = customerCallActivity;
         this.getRequestApi = getRequestApi;
+        this.sendNotification = sendNotification;
     }
 
     @Override
     public void getDirection(String destination, LatLng currentPosition) {
         getRequestApi.execute(new GetRequestObserver(), destination, currentPosition);
+    }
+
+    @Override
+    public void sendMessageNotification(SenderFCM senderFCM) {
+        sendNotification.execute(new SendNotificationObserver(), senderFCM);
     }
 
     private class GetRequestObserver extends UseCaseObserver<RequestGoogleApi> {
@@ -67,6 +80,30 @@ public class CustomerCallPresenter extends Presenter<ICustomerCallView> implemen
                         valueAux.getRoutes().get(0).getLegs().get(0).getEndAddress());
             }
 
+        }
+    }
+
+    private class SendNotificationObserver extends UseCaseObserver<ResponseFCM>{
+        private ResponseFCM responseFCM;
+        @Override
+        public void onNext(ResponseFCM value) {
+            super.onNext(value);
+            responseFCM = value;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onComplete() {
+            super.onComplete();
+            if (responseFCM != null){
+                if (responseFCM.getSuccess() == 1){
+                    getView().setToastNotification("Cancelled");
+                }
+            }
         }
     }
 }

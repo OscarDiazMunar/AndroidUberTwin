@@ -1,7 +1,9 @@
 package com.oscar.androidubertwin.di.CustomerCallActivity;
 
+import com.oscar.androidubertwin.data.rest.FCMClient;
 import com.oscar.androidubertwin.data.rest.GoogleMapsApiClient;
 import com.oscar.androidubertwin.domain.usecase.GetRequestApi;
+import com.oscar.androidubertwin.domain.usecase.SendNotification;
 import com.oscar.androidubertwin.presentation.presenter.CustomerCallPresenter.CustomerCallPresenter;
 import com.oscar.androidubertwin.presentation.ui.CustomerCallActivity;
 
@@ -24,6 +26,16 @@ public class CustomerCallModule {
     }
 
     /**
+     * Provide send notification send notification.
+     *
+     * @return the send notification
+     */
+    @Provides
+    public SendNotification provideSendNotification(){
+        return new SendNotification(FCMClient.getInstance());
+    }
+
+    /**
      * Provide customer call activity customer call activity.
      *
      * @return the customer call activity
@@ -38,10 +50,13 @@ public class CustomerCallModule {
      *
      * @param customerCallActivity the customer call activity
      * @param getRequestApi        the get request api
+     * @param sendNotification     the send notification
      * @return the customer call presenter
      */
     @Provides
-    public CustomerCallPresenter providesCustomerCallPresenter(CustomerCallActivity customerCallActivity, GetRequestApi getRequestApi){
-        return new CustomerCallPresenter(customerCallActivity, getRequestApi);
+    public CustomerCallPresenter providesCustomerCallPresenter(CustomerCallActivity customerCallActivity,
+                                                               GetRequestApi getRequestApi,
+                                                               SendNotification sendNotification){
+        return new CustomerCallPresenter(customerCallActivity, getRequestApi, sendNotification);
     }
 }

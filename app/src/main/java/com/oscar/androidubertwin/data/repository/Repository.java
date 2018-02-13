@@ -3,6 +3,8 @@ package com.oscar.androidubertwin.data.repository;
 import com.google.android.gms.maps.model.LatLng;
 import com.oscar.androidubertwin.domain.model.OverviewPolyline;
 import com.oscar.androidubertwin.domain.model.RequestGoogleApi;
+import com.oscar.androidubertwin.domain.model.ResponseFCM;
+import com.oscar.androidubertwin.domain.model.SenderFCM;
 import com.oscar.androidubertwin.domain.usecase.GetRequestApi;
 
 import io.reactivex.Observable;

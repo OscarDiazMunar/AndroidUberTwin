@@ -14,4 +14,11 @@ public interface ICustomerCallView extends Presenter.PView {
      * @param endAddress the end address
      */
     void setInformationNotification(String distance, String duration, String endAddress);
+
+    /**
+     * Sets toast notification.
+     *
+     * @param message the message
+     */
+    void setToastNotification(String message);
 }

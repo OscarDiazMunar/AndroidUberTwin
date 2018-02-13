@@ -25,7 +25,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 import com.firebase.geofire.GeoFire;
@@ -38,7 +37,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -160,11 +158,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isOnline) {
                 if (isOnline) {
+                    FirebaseDatabase.getInstance().goOnline();
                     startLocationUpdates();
                     displayLocation();
                     Snackbar.make(mapFragment.getView(), R.string.online, Snackbar.LENGTH_SHORT).show();
                     providerLocationIsEnable();
                 } else {
+                    FirebaseDatabase.getInstance().goOffline();
                     stopLocationUpdates();
                     if (current != null) {
                         current.remove();

@@ -4,12 +4,20 @@ import android.content.Context;
 import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.oscar.androidubertwin.domain.model.RequestGoogleApi;
 import com.oscar.androidubertwin.domain.usecase.GetRequestApi;
 import com.oscar.androidubertwin.domain.usecase.UseCaseObserver;
 import com.oscar.androidubertwin.presentation.presenter.Presenter;
 import com.oscar.androidubertwin.presentation.ui.MapsActivity;
 import com.oscar.androidubertwin.presentation.view.IMapsActivityView;
+import com.oscar.androidubertwin.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +34,8 @@ public class MapsActivityPresenter extends Presenter<IMapsActivityView> implemen
      */
     GetRequestApi getRequestApi;
 
+    private DatabaseReference onlineRef, currentUserref;
+
     /**
      * Instantiates a new Maps activity presenter.
      *
@@ -39,9 +49,25 @@ public class MapsActivityPresenter extends Presenter<IMapsActivityView> implemen
 
     @Override
     public void onCreate() {
-
+        presenceSystemUser();
     }
 
+    private void presenceSystemUser() {
+        onlineRef = FirebaseDatabase.getInstance().getReference().child(".info/connected");
+        currentUserref = FirebaseDatabase.getInstance().getReference(Constants.DBTables.driver_table)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        onlineRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUserref.onDisconnect().removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
     @Override
     public void getDirection(String destination, LatLng currentPOsition) {
         this.getRequestApi.execute(new GetRequestObserver(), destination, currentPOsition);

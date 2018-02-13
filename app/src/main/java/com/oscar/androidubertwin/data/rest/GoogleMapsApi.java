@@ -1,8 +1,6 @@
 package com.oscar.androidubertwin.data.rest;
 
-import com.oscar.androidubertwin.domain.model.OverviewPolyline;
 import com.oscar.androidubertwin.domain.model.RequestGoogleApi;
-import com.oscar.androidubertwin.domain.usecase.GetRequestApi;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
