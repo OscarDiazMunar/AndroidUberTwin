@@ -1,5 +1,6 @@
 package com.oscar.androidubertwin.presentation.ui;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.oscar.androidubertwin.R;
 import com.oscar.androidubertwin.di.CustomerCallActivity.CustomerCallComponent;
 import com.oscar.androidubertwin.di.CustomerCallActivity.CustomerCallModule;
 import com.oscar.androidubertwin.di.CustomerCallActivity.DaggerCustomerCallComponent;
+import com.oscar.androidubertwin.domain.model.DataNotification;
 import com.oscar.androidubertwin.domain.model.Notification;
 import com.oscar.androidubertwin.domain.model.SenderFCM;
 import com.oscar.androidubertwin.domain.model.Token;
@@ -77,6 +79,9 @@ public class CustomerCallActivity extends AppCompatActivity implements ICustomer
     @Inject
     CustomerCallPresenter presenter;
 
+    double latitude;
+    double longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,8 +94,8 @@ public class CustomerCallActivity extends AppCompatActivity implements ICustomer
         initMediaPlayer();
 
         if (getIntent() != null) {
-            double latitude = getIntent().getDoubleExtra("lat", -1.0);
-            double longitude = getIntent().getDoubleExtra("lng", -1.0);
+            latitude = getIntent().getDoubleExtra("lat", -1.0);
+            longitude = getIntent().getDoubleExtra("lng", -1.0);
             LatLng currentPosition = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             String destination = Double.toString(latitude) + "," + Double.toString(longitude);
             customerId = getIntent().getStringExtra("customer");
@@ -150,6 +155,12 @@ public class CustomerCallActivity extends AppCompatActivity implements ICustomer
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnAccept:
+                Intent intent = new Intent(CustomerCallActivity.this, DriverTracking.class);
+                intent.putExtra("lat", latitude);
+                intent.putExtra("lng", longitude);
+                intent.putExtra("customer", customerId);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.btnDecline:
                 if (!TextUtils.isEmpty(customerId)){
@@ -165,7 +176,7 @@ public class CustomerCallActivity extends AppCompatActivity implements ICustomer
         Notification notification = new Notification(getString(R.string.call_title_notification),
                                                     getString(R.string.call_body_notification));
 
-        SenderFCM senderFCM = new SenderFCM(notification, token.getToken());
+        SenderFCM senderFCM = new SenderFCM(notification, token.getToken(), new DataNotification(".", ".", 1));
         presenter.sendMessageNotification(senderFCM);
     }
 }

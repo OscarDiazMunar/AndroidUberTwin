@@ -15,14 +15,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.oscar.androidubertwin.R;
 import com.oscar.androidubertwin.domain.model.User;
 import com.oscar.androidubertwin.presentation.presenter.Presenter;
 import com.oscar.androidubertwin.presentation.ui.MainActivity;
 import com.oscar.androidubertwin.presentation.view.IMainActivityView;
 import com.oscar.androidubertwin.utils.Constants;
+import com.oscar.androidubertwin.utils.GlobalVariables;
 import com.oscar.androidubertwin.utils.Validator;
 
 /**
@@ -72,6 +76,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
         final AlertDialog.Builder dialogRegister = new AlertDialog.Builder(this.context);
         dialogRegister.setTitle(R.string.title_register);
         dialogRegister.setMessage(R.string.message_register);
+
 
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View registerLayout = inflater.inflate(R.layout.layout_register, null);
@@ -159,6 +164,7 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         getView().dismissProgress();
+                        saveUserInfo();
                         getView().navigateToWelcome();
                         mainActivity.finish();
                     }
@@ -170,6 +176,23 @@ public class MainActivityPresenter extends Presenter<IMainActivityView> implemen
                 getView().setMessageSnackBar(context.getString(R.string.login_error) + e.getMessage());
             }
         });
+    }
+
+    private void saveUserInfo() {
+        FirebaseDatabase.getInstance().getReference(Constants.DBTables.user_driver_table)
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        GlobalVariables.currentUser = dataSnapshot.getValue(User.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     private void createNewUser() {

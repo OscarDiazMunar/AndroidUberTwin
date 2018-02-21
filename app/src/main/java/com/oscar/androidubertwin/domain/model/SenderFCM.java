@@ -12,15 +12,21 @@ public class SenderFCM {
     @SerializedName("to")
     private String to;
 
+    @SerializedName("data")
+    private DataNotification data;
+
     /**
      * Instantiates a new Sender fcm.
      *
-     * @param dataFCM the data fcm
+     * @param dataFCM the DataNotification fcm
      * @param to      the to
+     * @param data    the data
      */
-    public SenderFCM(Notification dataFCM, String to) {
+    public SenderFCM(Notification dataFCM, String to, DataNotification data) {
         this.notification = dataFCM;
         this.to = to;
+        this.data = data;
+
     }
 
     /**
@@ -64,6 +70,7 @@ public class SenderFCM {
         return "SenderFCM{" +
                 "notification=" + notification +
                 ", to='" + to + '\'' +
+                ", DataNotification=" + data +
                 '}';
     }
 }

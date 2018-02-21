@@ -37,4 +37,7 @@
     <string name="call.decline">DECLINE</string>
     <string name="call.title.notification">Notice!</string>
     <string name="call.body.notification">Driver has cancelled your request</string>
+    <string name="title_activity_driver_tracking">Map</string>
+    <string name="title_driver_arrived">Arrived</string>
+    <string name="body_driver_arrived">The driver %1$s has arrived at your location</string>
 </resources>
