@@ -56,6 +56,6 @@ public class GoogleMapsApiClient implements Repository{
     @Override
     public Observable<RequestGoogleApi> getRequestApi(String destination, LatLng currentPosition) {
         String origin = Double.toString(currentPosition.latitude) + "," + Double.toString(currentPosition.longitude);
-        return services.getPath("driving", "less_driving", origin, destination, "AIzaSyCd2NTGuFbyE3EeaK5zK3OgXTWDSEQi95Q");
+        return services.getPath("driving", "less_driving", origin, destination, "");
     }
 }
